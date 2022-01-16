@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.less";
+import { Lulus } from "./pages/Lulus";
+import { Login } from "./pages/Login";
+import { CountDown } from "./pages/CountDown";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [page, setpage] = useState("login");
+    const [nisn, setnisn] = useState("0030850212");
+    return (
+        <div className="App">
+            
+            {page === "login" && (
+                <Login
+                    onLoginSuccess={(nisn) => {
+                        setpage("lulus");
+                        setnisn(nisn);
+                    }}
+                ></Login>
+            )}
+            {page === "lulus" && <Lulus nisn={nisn}></Lulus>}
+        </div>
+    );
 }
 
 export default App;
