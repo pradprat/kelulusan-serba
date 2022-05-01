@@ -6,19 +6,18 @@ import { Login } from "./pages/Login";
 import { CountDown } from "./pages/CountDown";
 function App() {
     const [page, setpage] = useState("login");
-    const [nisn, setnisn] = useState("0030850212");
+    const [siswa, setsiswa] = useState<any>("0030850212");
     return (
         <div className="App">
-            
             {page === "login" && (
                 <Login
-                    onLoginSuccess={(nisn) => {
+                    onLoginSuccess={siswa => {
                         setpage("lulus");
-                        setnisn(nisn);
+                        setsiswa(siswa);
                     }}
                 ></Login>
             )}
-            {page === "lulus" && <Lulus nisn={nisn}></Lulus>}
+            {page === "lulus" && <Lulus siswa={siswa}></Lulus>}
         </div>
     );
 }
