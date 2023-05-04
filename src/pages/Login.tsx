@@ -12,68 +12,92 @@ import { CountDown } from "./CountDown";
 type LoginProps = { onLoginSuccess: (nisn: string) => any };
 
 export const Login = ({ onLoginSuccess }: LoginProps) => {
-    const [itsTime, setitsTime] = useState(false);
-    const [siswa, setsiswa] = useState(undefined);
-    useEffect(() => {
-        moment.locale("id");
-        console.log(moment().format("MMMM Do YYYY"));
+  const [itsTime, setitsTime] = useState(false);
+  const [siswa, setsiswa] = useState(undefined);
+  useEffect(() => {
+    dataSiswa.forEach((d) => {
+      console.log(moment(d["Tanggal Lahir"]).isValid());
 
-        return () => {};
-    }, []);
-    const onFinish = (data: any) => {
-        let siswa: any = dataSiswa.find(d => {
-            return d.NISN === data.NISN;
-        });
-        if (siswa === undefined) {
-            message.error("Data Siswa Tidak Ditemukan");
-        } else {
-            setsiswa(siswa);
-            // message.success("Login Berhasil");
-            onLoginSuccess(siswa);
-            // if (moment(siswa["Tanggal Lahir"]).format("DDMMYYYY") === data.password) {
-            // } else {
-            //     message.error("Password Salah");
-            // }
-        }
-    };
-    return (
-        <>
-            <div className="login-container">
-                <div className="logo-container">
-                    <img height={80} style={{ margin: "4px 16px" }} src={logo_serba} alt="" />
-                    <img height={80} style={{ margin: "4px 16px" }} src={logo_jabar} alt="" />
-                </div>
-                <h1>SMAN 1 SERANG BARU</h1>
-                <h2>KELULUSAN</h2>
-                {(!itsTime && (
-                    <CountDown
-                        deadline={"May 3, 2021 09:00:00"}
-                        onItsTime={itsTime => {
-                            setitsTime(itsTime);
-                        }}
-                    ></CountDown>
-                )) || (
-                    <Form
-                        name="normal_login"
-                        className="login-form"
-                        initialValues={{ remember: true }}
-                        onFinish={onFinish}
-                    >
-                        <Form.Item
-                            name="NISN"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Tidak Boleh Kosong",
-                                },
-                            ]}
-                        >
-                            <Input
-                                prefix={<UserOutlined className="site-form-item-icon" />}
-                                placeholder="Masukan NISN atau Nomor Induk"
-                            />
-                        </Form.Item>
-                        {/* <Form.Item
+      console.log(moment(d["Tanggal Lahir"]).format("DD MMMM YYYY"));
+    });
+    moment.locale("id");
+    console.log(moment().format("MMMM Do YYYY"));
+
+    return () => {};
+  }, []);
+  const onFinish = (data: any) => {
+    console.log(data);
+
+    console.log(dataSiswa);
+
+    let siswa: any = dataSiswa.find((d) => {
+      return String(d.NISN) === String(data.NISN);
+    });
+    if (!siswa) {
+      siswa = dataSiswa.find((d) => {
+        return String(d["No Induk"]) === String(data.NISN);
+      });
+    }
+    if (siswa === undefined) {
+      message.error("Data Siswa Tidak Ditemukan");
+    } else {
+      setsiswa(siswa);
+      // message.success("Login Berhasil");
+      onLoginSuccess(siswa);
+      // if (moment(siswa["Tanggal Lahir"]).format("DDMMYYYY") === data.password) {
+      // } else {
+      //     message.error("Password Salah");
+      // }
+    }
+  };
+  return (
+    <>
+      <div className="login-container">
+        <div className="logo-container">
+          <img
+            height={80}
+            style={{ margin: "4px 16px" }}
+            src={logo_serba}
+            alt=""
+          />
+          <img
+            height={80}
+            style={{ margin: "4px 16px" }}
+            src={logo_jabar}
+            alt=""
+          />
+        </div>
+        <h1>SMAN 1 SERANG BARU</h1>
+        <h2>KELULUSAN</h2>
+        {(!itsTime && (
+          <CountDown
+            deadline={"May 5, 2023 07:00:00"}
+            onItsTime={(itsTime) => {
+              setitsTime(itsTime);
+            }}
+          ></CountDown>
+        )) || (
+          <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              name="NISN"
+              rules={[
+                {
+                  required: true,
+                  message: "Tidak Boleh Kosong",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Masukan NISN atau Nomor Induk"
+              />
+            </Form.Item>
+            {/* <Form.Item
                             name="password"
                             rules={[
                                 {
@@ -89,14 +113,18 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                             />
                         </Form.Item> */}
 
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-form-button">
-                                Log in
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                )}
-            </div>
-        </>
-    );
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </div>
+    </>
+  );
 };
